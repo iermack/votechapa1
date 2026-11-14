@@ -284,6 +284,36 @@ h2{margin-bottom:0}
 @media (max-width:640px){.mf-row{grid-template-columns:1fr}}
 @media (min-width:901px){.cand{flex:0 0 auto;width:58%}.cand+.cand{margin-left:-14%}}
 @media (min-width:901px){.bio{left:12%;right:-6%;top:-28%;bottom:auto;padding:12px 15px;font-size:.84rem;line-height:1.4;border-radius:20px}.bio b{font-size:1.05rem;margin:2px 0 5px}.bio .r{font-size:.62rem;padding:1px 9px}}
+
+/* rentabilidade */
+.rt-ctrl{display:flex;flex-wrap:wrap;gap:12px 22px;align-items:center;margin:24px 0 6px}
+.rt-ctrl label{display:flex;gap:10px;align-items:center;font-weight:700;font-size:1rem}
+.rt-ctrl select{font:inherit;font-weight:600;color:var(--ink);background:var(--card);border:2px solid var(--line);border-radius:10px;padding:8px 12px}
+.rt-seg{display:inline-flex;border:2px solid var(--line);border-radius:999px;overflow:hidden;background:var(--card)}
+.rt-seg button{font:inherit;font-weight:700;font-size:.95rem;color:var(--ink);background:transparent;border:0;padding:9px 16px;cursor:pointer}
+.rt-seg button[aria-pressed="true"]{background:var(--teal-dark);color:#fff}
+.rt-take{background:var(--teal-tint);border-radius:12px;padding:14px 18px;margin:18px 0 0;font-size:1.02rem}
+.rt-take p{margin:0 0 .35em}.rt-take p:last-child{margin:0}
+.rt-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin:16px 0}
+.rt-card h3{margin:0 0 2px;font-size:1.15rem}
+.rt-card .rt-inf{margin:0 0 10px;color:var(--ink-soft);font-size:.95rem}
+.rt-leg{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.88rem;color:var(--ink-soft);margin:0 0 10px}
+.rt-leg i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.rt-row{display:grid;grid-template-columns:minmax(96px,150px) 1fr;gap:12px;align-items:center;padding:7px 0;border-top:1px solid var(--line)}
+.rt-row:first-of-type{border-top:0}
+.rt-name{font-weight:700;font-size:.95rem;line-height:1.25}
+.rt-track{position:relative;display:flex;flex-direction:column;gap:5px}
+.rt-b{display:flex;align-items:center;gap:8px;min-height:18px}
+.rt-b span.bar{display:block;height:16px;border-radius:5px;background:var(--teal);min-width:3px}
+.rt-b.m span.bar{height:11px;background:#aebdd6}
+.rt-b em{font-style:normal;font-weight:700;font-size:.9rem;white-space:nowrap}
+.rt-b.m em{font-weight:600;font-size:.82rem;color:var(--ink-soft)}
+.rt-tick{position:absolute;top:-4px;bottom:-4px;width:0;border-left:2px dashed #7b8ba6;pointer-events:none}
+.rt-tick b{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:.72rem;font-weight:700;color:#5b6c88;white-space:nowrap}
+.rt-card.cv .rt-chart{padding-top:14px}
+.rt-t td.up{color:#146c3a;font-weight:700}.rt-t td.down{color:#a3262a}
+.rt-note{font-size:.9rem;color:var(--ink-soft);margin:10px 0 0}
+@media(max-width:560px){.rt-row{grid-template-columns:1fr;gap:4px}}
 </style>
 </head>
 <body>
@@ -305,6 +335,7 @@ h2{margin-bottom:0}
       <a href="#compromissos">Compromissos</a>
       <a href="#plataforma">Plataforma</a>
       <a href="#numeros">Números</a>
+      <a href="#rentabilidade">Rentabilidade</a>
       <a href="#votar">Como votar</a>
       <a href="#duvidas">Dúvidas</a>
     </nav>
@@ -475,6 +506,35 @@ h2{margin-bottom:0}
   </div>
 </section>
 
+<section id="rentabilidade">
+  <div class="wrap">
+    <p class="eyebrow">Resultado dos investimentos</p>
+    <h2>Rentabilidade dos planos, 2020 a 2025</h2>
+    <p class="lead">Retorno anual de cada plano, acumulado em janelas maiores e comparado com a meta do próprio plano e com a inflação (INPC). Todos os dados vêm dos Relatórios Anuais do Agros e do IBGE.</p>
+    <div class="rt-ctrl">
+      <label>Plano <select id="rt-plano" aria-label="Plano"></select></label>
+      <div class="rt-seg" role="group" aria-label="Tipo de retorno"><button type="button" data-m="nominal" aria-pressed="true">Nominal</button><button type="button" data-m="real" aria-pressed="false">Real (descontado o INPC)</button></div>
+    </div>
+    <div class="rt-take" id="rt-take" aria-live="polite"></div>
+    <div id="rt-charts"></div>
+
+    <h3 style="margin-top:30px">Resumo por plano</h3>
+    <div class="scroll"><table class="rt-t"><thead><tr><th>Plano</th><th>3 anos</th><th>Meta</th><th>5 anos</th><th>Meta</th><th>6 anos</th><th>Meta</th><th>Média anual (5 anos)</th></tr></thead><tbody id="rt-resumo"></tbody></table></div>
+
+    <h3 style="margin-top:30px">Ano a ano</h3>
+    <p class="small">Verde: ficou na meta ou acima dela naquele ano. Vermelho: ficou abaixo.</p>
+    <div class="scroll"><table class="rt-t"><thead><tr><th>Rentabilidade</th><th>2020</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th></tr></thead><tbody id="rt-ano"></tbody></table></div>
+    <div class="scroll" style="margin-top:14px"><table class="rt-t"><thead><tr><th>Meta de referência</th><th>2020</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th></tr></thead><tbody id="rt-meta"></tbody></table></div>
+
+    <details style="margin-top:18px"><summary><strong>Como ler e ressalvas</strong></summary>
+      <p class="small">Os retornos nominais foram copiados do quadro "Rentabilidades por Segmento/Plano" de cada Relatório Anual (2020 a 2025). O acumulado é a composição dos retornos anuais, e o mesmo cálculo vale para a meta.</p>
+      <p class="small">O retorno real desconta a inflação medida pelo INPC (IBGE): real = (1 + nominal) / (1 + INPC) − 1, ano a ano, depois composto. INPC usado: 5,45% (2020), 10,16% (2021), 5,93% (2022), 3,71% (2023), 4,77% (2024) e 3,90% (2025). A comparação com a meta não muda entre nominal e real, porque a meta também é descontada do INPC.</p>
+      <p class="small">As metas não são iguais entre planos. O Plano A e o Plano B/VidaPrev usam meta atuarial em torno de INPC mais juros; InvestPrev, PGA e Plano Assistencial usam Selic ou CDI. Comparar um plano com a própria meta é válido; comparar um plano com outro exige cuidado.</p>
+      <p class="small">O Plano B foi transferido para o VidaPrev em 1º de abril de 2024. Para ter uma série contínua, 2024 encadeia o Plano B (janeiro a março) e o VidaPrev (abril a dezembro), pelo texto do relatório de 2024. Em 2020, o InvestPrev aparece no relatório como "Agros CD-01". O PGA é o plano de gestão administrativa, não um plano de benefícios. Resultado passado não garante resultado futuro.</p>
+    </details>
+  </div>
+</section>
+
 <section id="onde" class="alt">
   <div class="wrap">
     <p class="eyebrow">Dia da eleição</p>
@@ -637,5 +697,79 @@ h2{margin-bottom:0}
 })();
 </script>
 <a class="wa wa-float" aria-label="Compartilhar o site no WhatsApp" href="https://wa.me/?text=Conhe%C3%A7a%20a%20Chapa%201%20%28Fl%C3%A1vio%20e%20Ricardo%29%20para%20o%20Conselho%20Deliberativo%20do%20Agros%3A%20Transpar%C3%AAncia%20hoje.%20Sustentabilidade%20amanh%C3%A3.%0AA%20elei%C3%A7%C3%A3o%20%C3%A9%20em%2027/11.%0Ahttps%3A//votechapa1.netlify.app" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2Zm5.8 14.09c-.24.68-1.42 1.3-1.95 1.35-.5.05-1.13.07-1.82-.11a16.5 16.5 0 0 1-1.65-.61c-2.9-1.25-4.78-4.17-4.92-4.37-.14-.19-1.17-1.56-1.17-2.98 0-1.42.74-2.12 1-2.41.26-.29.57-.36.76-.36h.55c.18 0 .42-.07.65.5.24.58.82 2 .89 2.15.07.14.12.31.02.5-.1.19-.14.31-.29.48-.14.17-.3.38-.43.51-.14.14-.29.3-.12.58.17.29.74 1.22 1.59 1.97 1.09.97 2.01 1.27 2.3 1.41.29.14.46.12.63-.07.17-.19.72-.84.91-1.13.19-.29.38-.24.65-.14.26.1 1.67.79 1.96.93.29.14.48.22.55.34.07.12.07.7-.17 1.38Z"/></svg><span>Compartilhar no WhatsApp</span></a>
+
+<script>
+(function(){
+var DATA={"Plano A":{"r":[7.07,3.3,5.71,13.72,3.64,13.95],"m":[10.22,14.46,9.74,7.43,8.53,7.63]},"Plano B / VidaPrev":{"r":[6.97,3.72,8.9,13.59,5.56,12.42],"m":[9.77,14.31,9.77,8.53,9.62,8.73]},"InvestPrev":{"r":[5.38,1.71,10.63,12.8,7.72,15.05],"m":[2.76,4.43,12.39,13.04,10.88,14.32]},"Plano Assistencial":{"r":[2.54,3.73,10.1,14.33,6.5,16.86],"m":[2.76,4.43,12.39,13.04,10.88,14.32]},"PGA":{"r":[6.2,3.54,9.64,15.81,1.71,17.51],"m":[2.76,4.43,12.39,13.04,10.88,14.32]}};
+var INPC=[5.45,10.16,5.93,3.71,4.77,3.90], ANOS=[2020,2021,2022,2023,2024,2025], JAN=[3,5,6];
+var modo='nominal', plano='';
+var nf=new Intl.NumberFormat('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1});
+var nf2=new Intl.NumberFormat('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+function p1(v){return nf.format(v)+'%'} function p2(v){return nf2.format(v)+'%'}
+var nomes=Object.keys(DATA);
+function acum(arr,n){var x=1;for(var i=6-n;i<6;i++)x*=1+arr[i]/100;return x-1}
+function calc(){var out={};nomes.forEach(function(p){out[p]={};JAN.forEach(function(n){
+  var a=acum(DATA[p].r,n),m=acum(DATA[p].m,n),f=acum(INPC,n);
+  out[p][n]={rent:a*100,meta:m*100,inf:f*100,rr:((1+a)/(1+f)-1)*100,mr:((1+m)/(1+f)-1)*100,
+   aa:(Math.pow(1+a,1/n)-1)*100,aar:(Math.pow((1+a)/(1+f),1/n)-1)*100};});});return out}
+var C=calc();
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function vis(){return plano?[plano]:nomes}
+function render(){
+  var real=modo==='real';
+  document.querySelectorAll('.rt-seg button').forEach(function(b){b.setAttribute('aria-pressed',String((b.dataset.m==='real')===real))});
+  // resumo em frase
+  var take=document.getElementById('rt-take');take.textContent='';
+  function cont(n,fn){return nomes.filter(function(p){return fn(C[p][n])}).length}
+  var p1_=el('p');p1_.textContent='Contra a meta de cada plano: '+cont(3,function(r){return r.rent>=r.meta})+' de '+nomes.length+' planos ficaram na meta ou acima em 3 anos (2023 a 2025), '+cont(5,function(r){return r.rent>=r.meta})+' em 5 anos e '+cont(6,function(r){return r.rent>=r.meta})+' em 6 anos.';
+  var p2_=el('p');p2_.textContent='Contra a inflação (INPC): '+cont(3,function(r){return r.rent>=r.inf})+' de '+nomes.length+' ficaram acima em 3 anos, '+cont(5,function(r){return r.rent>=r.inf})+' em 5 anos e '+cont(6,function(r){return r.rent>=r.inf})+' em 6 anos.';
+  take.appendChild(p1_);take.appendChild(p2_);
+  // graficos
+  var box=document.getElementById('rt-charts');box.textContent='';
+  var titulos={3:'Últimos 3 anos (2023 a 2025)',5:'Últimos 5 anos (2021 a 2025)',6:'Seis anos (2020 a 2025)'};
+  JAN.forEach(function(n){
+    var vk=real?'rr':'rent',mk=real?'mr':'meta';
+    var max=1;nomes.forEach(function(p){max=Math.max(max,C[p][n][vk],C[p][n][mk],real?0:C[p][n].inf)});
+    var card=el('div','rt-card');card.appendChild(el('h3',null,titulos[n]));
+    card.appendChild(el('p','rt-inf','INPC acumulado no período: '+p1(C[nomes[0]][n].inf)));
+    var lg=el('div','rt-leg');
+    var a=el('span');var i1=el('i');i1.style.background='var(--teal)';a.appendChild(i1);a.appendChild(document.createTextNode(real?'Rentabilidade real do plano':'Rentabilidade do plano'));lg.appendChild(a);
+    var b=el('span');var i2=el('i');i2.style.background='#aebdd6';b.appendChild(i2);b.appendChild(document.createTextNode(real?'Meta real acumulada':'Meta acumulada'));lg.appendChild(b);
+    if(!real){var c=el('span');var i3=el('i');i3.style.background='none';i3.style.borderLeft='2px dashed #7b8ba6';i3.style.borderRadius='0';i3.style.width='0';c.appendChild(i3);c.appendChild(document.createTextNode('INPC acumulado'));lg.appendChild(c)}
+    card.appendChild(lg);
+    var ch=el('div','rt-chart');
+    vis().slice().sort(function(x,y){return C[y][n][vk]-C[x][n][vk]}).forEach(function(p){
+      var r=C[p][n],row=el('div','rt-row');row.appendChild(el('div','rt-name',p));
+      var tr=el('div','rt-track');
+      [[vk,'',r[vk]],[mk,' m',r[mk]]].forEach(function(s){
+        var line=el('div','rt-b'+s[1]);var bar=el('span','bar');bar.style.width=(Math.max(0,s[2])/max*78)+'%';
+        line.appendChild(bar);line.appendChild(el('em',null,p1(s[2])));tr.appendChild(line)});
+      if(!real){var t=el('div','rt-tick');t.style.left=(r.inf/max*78)+'%';t.setAttribute('title','INPC acumulado '+p1(r.inf));tr.appendChild(t)}
+      row.appendChild(tr);
+      row.setAttribute('title',p+': nominal '+p1(r.rent)+' (meta '+p1(r.meta)+'); real '+p1(r.rr)+' (meta '+p1(r.mr)+'); INPC '+p1(r.inf));
+      ch.appendChild(row)});
+    card.appendChild(ch);box.appendChild(card)});
+  // resumo
+  var tb=document.getElementById('rt-resumo');tb.textContent='';
+  vis().forEach(function(p){var tr=el('tr');tr.appendChild(el('td',null,p));
+    JAN.forEach(function(n){tr.appendChild(el('td',null,p1(C[p][n][real?'rr':'rent'])));tr.appendChild(el('td',null,p1(C[p][n][real?'mr':'meta'])))});
+    tr.appendChild(el('td',null,p2(C[p][5][real?'aar':'aa'])));tb.appendChild(tr)});
+  // ano a ano
+  var ta=document.getElementById('rt-ano'),tm=document.getElementById('rt-meta');ta.textContent='';tm.textContent='';
+  function real_(v,f){return ((1+v/100)/(1+f/100)-1)*100}
+  vis().forEach(function(p){var tr=el('tr'),tq=el('tr');tr.appendChild(el('td',null,p));tq.appendChild(el('td',null,p));
+    for(var i=0;i<6;i++){var v=DATA[p].r[i],m=DATA[p].m[i];if(real){v=real_(v,INPC[i]);m=real_(m,INPC[i])}
+      tr.appendChild(el('td',v>=m-1e-9?'up':'down',p2(v)));tq.appendChild(el('td',null,p2(m)))}
+    ta.appendChild(tr);tm.appendChild(tq)});
+  var ti=el('tr');ti.appendChild(el('td',null,'INPC no ano'));INPC.forEach(function(v){ti.appendChild(el('td',null,p2(v)))});tm.appendChild(ti);
+}
+var sel=document.getElementById('rt-plano');
+if(sel){var o=document.createElement('option');o.value='';o.textContent='Todos os planos';sel.appendChild(o);
+  nomes.forEach(function(p){var q=document.createElement('option');q.value=p;q.textContent=p;sel.appendChild(q)});
+  sel.addEventListener('change',function(){plano=sel.value;render()});
+  document.querySelectorAll('.rt-seg button').forEach(function(b){b.addEventListener('click',function(){modo=b.dataset.m;render()})});
+  render()}
+})();
+</script>
 </body>
 </html>
