@@ -325,6 +325,9 @@ h2{margin-bottom:0}
 .rt-y{table-layout:fixed;min-width:640px}
 .rt-y th:first-child,.rt-y td:first-child{width:25%;text-align:left}
 .rt-y th:not(:first-child),.rt-y td:not(:first-child){width:12.5%;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+nav a.nav-cta{background:var(--teal-dark);color:#fff;border-radius:999px;padding:8px 18px;border-bottom:0;font-weight:700}
+nav a.nav-cta:hover{filter:brightness(1.12);border-bottom:0}
+@media(max-width:560px){nav{gap:2px 16px}nav a{font-size:.92rem;padding:4px 0}nav a.nav-cta{display:none}}
 .rt-note{font-size:.9rem;color:var(--ink-soft);margin:10px 0 0}
 @media(max-width:560px){.rt-row{grid-template-columns:1fr;gap:4px}}
 </style>
@@ -336,7 +339,6 @@ h2{margin-bottom:0}
     <span>Eleição do Conselho Deliberativo do Agros · 27/11/2026</span>
     <span style="display:flex;align-items:center;flex-wrap:wrap">
       <span class="fsz" aria-label="Tamanho do texto"><button type="button" data-fs="-1" aria-label="Diminuir texto">A-</button><button type="button" data-fs="0" aria-label="Texto normal">A</button><button type="button" data-fs="1" aria-label="Aumentar texto">A+</button></span>
-      <a href="#votar">Como votar</a><a href="#duvidas">Dúvidas</a><a href="#contato">Fale com a chapa</a>
     </span>
   </div>
 </div>
@@ -344,13 +346,12 @@ h2{margin-bottom:0}
   <div class="wrap">
     <a class="brand" href="#inicio"><span class="num">1</span><span>Chapa 1<small>Conselho Deliberativo</small></span></a>
     <nav aria-label="Seções">
-      <a href="#candidatos">A chapa</a>
-      <a href="#compromissos">Compromissos</a>
-      <a href="#plataforma">Plataforma</a>
-      <a href="#numeros">Números</a>
-      <a href="#rentabilidade">Rentabilidade</a>
       <a href="#votar">Como votar</a>
+      <a href="#compromissos">Propostas</a>
+      <a href="#numeros">Números</a>
+      <a href="#candidatos">A chapa</a>
       <a href="#duvidas">Dúvidas</a>
+      <a class="nav-cta" href="#contato">Fale com a chapa</a>
     </nav>
   </div>
 </header>
