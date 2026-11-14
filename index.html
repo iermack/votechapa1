@@ -317,6 +317,9 @@ h2{margin-bottom:0}
 .rt-tick b{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:.72rem;font-weight:700;color:#5b6c88;white-space:nowrap}
 .rt-card.cv .rt-chart{padding-top:14px}
 .rt-t td.up{color:#146c3a;font-weight:700}.rt-t td.down{color:#a3262a}
+.rt-y{table-layout:fixed;min-width:640px}
+.rt-y th:first-child,.rt-y td:first-child{width:25%;text-align:left}
+.rt-y th:not(:first-child),.rt-y td:not(:first-child){width:12.5%;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .rt-note{font-size:.9rem;color:var(--ink-soft);margin:10px 0 0}
 @media(max-width:560px){.rt-row{grid-template-columns:1fr;gap:4px}}
 </style>
@@ -528,8 +531,8 @@ h2{margin-bottom:0}
 
     <h3 style="margin-top:30px">Ano a ano</h3>
     <p class="small">Verde: ficou na meta ou acima dela naquele ano. Vermelho: ficou abaixo.</p>
-    <div class="scroll"><table class="rt-t"><thead><tr><th>Rentabilidade</th><th>2020</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th></tr></thead><tbody id="rt-ano"></tbody></table></div>
-    <div class="scroll" style="margin-top:14px"><table class="rt-t"><thead><tr><th>Meta de referência</th><th>2020</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th></tr></thead><tbody id="rt-meta"></tbody></table></div>
+    <div class="scroll"><table class="rt-t rt-y"><thead><tr><th>Rentabilidade</th><th>2020</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th></tr></thead><tbody id="rt-ano"></tbody></table></div>
+    <div class="scroll" style="margin-top:14px"><table class="rt-t rt-y"><thead><tr><th>Meta de referência</th><th>2020</th><th>2021</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th></tr></thead><tbody id="rt-meta"></tbody></table></div>
 
     <details style="margin-top:18px"><summary><strong>Como ler e ressalvas</strong></summary>
       <p class="small">Os retornos nominais foram copiados do quadro "Rentabilidades por Segmento/Plano" de cada Relatório Anual (2020 a 2025). O acumulado é a composição dos retornos anuais, e o mesmo cálculo vale para a meta.</p>
