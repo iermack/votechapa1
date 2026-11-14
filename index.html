@@ -269,6 +269,19 @@ h2{margin-bottom:0}
 .bio{left:2%;right:2%;padding:16px 20px;font-size:1rem;line-height:1.5}
 .bio b{font-size:1.3rem;margin:4px 0 8px}
 .bio .r{font-size:.74rem;padding:2px 12px}
+
+.msgform{max-width:680px;margin-top:28px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 8px 24px rgba(31,79,149,.08)}
+.msgform h3{margin:0 0 12px}
+.msgform label{display:block;font-weight:600;color:var(--ink);margin:12px 0 6px}
+.msgform textarea,.msgform input{width:100%;font:inherit;color:var(--ink);border:1px solid #c9d8ee;border-radius:12px;padding:12px 14px;background:#fbfdff;box-sizing:border-box}
+.msgform textarea{resize:vertical;min-height:120px}
+.msgform textarea:focus,.msgform input:focus{outline:2px solid var(--teal);outline-offset:1px}
+.mf-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.mf-note{font-size:.88rem;color:var(--ink-soft);margin:12px 0 16px}
+.mf-ok{color:#1b6b3a;font-weight:600;margin:14px 0 0}
+.mf-err{color:#a12b2b;font-weight:600;margin:14px 0 0}
+.hp{position:absolute;left:-9999px;height:0;overflow:hidden}
+@media (max-width:640px){.mf-row{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -545,6 +558,21 @@ h2{margin-bottom:0}
         <p>E-mail: <a href="mailto:ricardo.gandini@ufv.br">ricardo.gandini@ufv.br</a></p>
       </article>
     </div>
+    <form class="msgform" name="contato" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field" id="msgform">
+      <input type="hidden" name="form-name" value="contato">
+      <p class="hp" aria-hidden="true"><label>Não preencha: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+      <h3>Envie seu recado</h3>
+      <label for="mf-msg">Sua mensagem</label>
+      <textarea id="mf-msg" name="mensagem" rows="5" required maxlength="2000" placeholder="Escreva aqui sua pergunta, sugestão ou demanda"></textarea>
+      <div class="mf-row">
+        <div><label for="mf-nome">Seu nome (opcional)</label><input id="mf-nome" name="nome" type="text" maxlength="100" autocomplete="name"></div>
+        <div><label for="mf-email">E-mail para resposta (opcional)</label><input id="mf-email" name="email" type="email" maxlength="120" autocomplete="email"></div>
+      </div>
+      <p class="mf-note">Usamos o seu nome e e-mail apenas para responder a este recado. Se preferir, envie sem se identificar.</p>
+      <button class="btn dark" type="submit">Enviar recado</button>
+      <p class="mf-ok" id="mf-ok" role="status" hidden>Recado enviado. Obrigado por falar com a chapa!</p>
+      <p class="mf-err" id="mf-err" role="alert" hidden>Não foi possível enviar agora. Tente de novo ou escreva para um dos e-mails acima.</p>
+    </form>
   </div>
 </section>
 
@@ -569,6 +597,16 @@ h2{margin-bottom:0}
       root.style.setProperty('--u',(100+fs*10)/100);
     });
   });
+  var f=document.getElementById('msgform');
+  if(f){f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var ok=document.getElementById('mf-ok'),er=document.getElementById('mf-err');
+    ok.hidden=true;er.hidden=true;
+    var body=new URLSearchParams(new FormData(f)).toString();
+    fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body})
+      .then(function(r){if(!r.ok)throw 0;f.reset();ok.hidden=false;})
+      .catch(function(){er.hidden=false;});
+  });}
   var tabs=[].slice.call(document.querySelectorAll('.tab'));
   function show(t){
     tabs.forEach(function(b){
