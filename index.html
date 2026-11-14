@@ -65,7 +65,7 @@ nav a:hover{border-bottom-color:var(--amber)}
 .hero{position:relative;overflow:hidden}
 .hero .wrap{position:relative;z-index:2;pointer-events:none}
 .hero-text{max-width:calc(520px * var(--s));pointer-events:auto}
-.hero-bg{position:absolute;top:0;bottom:0;right:calc(max(0px,(100% - 1160px * var(--s))/2) + 20px);left:calc(max(0px,(100% - 1160px * var(--s))/2) + 540px * var(--s));display:flex;align-items:flex-end;justify-content:center;z-index:1;pointer-events:none}
+.hero-bg{position:absolute;top:0;bottom:0;right:calc(max(0px,(100% - 1160px * var(--s))/2));left:calc(max(0px,(100% - 1160px * var(--s))/2) + 450px * var(--s));display:flex;align-items:flex-end;justify-content:center;z-index:1;pointer-events:none}
 .cand{position:relative;margin:0;flex:0 1 auto;width:74%;min-width:0;pointer-events:auto;cursor:pointer;outline-offset:4px}
 .cand+.cand{margin-left:-18%}
 .cand img{display:block;width:100%;height:auto;opacity:.82;transition:opacity 1s ease,-webkit-mask-size 1s ease,mask-size 1s ease;
@@ -282,6 +282,8 @@ h2{margin-bottom:0}
 .mf-err{color:#a12b2b;font-weight:600;margin:14px 0 0}
 .hp{position:absolute;left:-9999px;height:0;overflow:hidden}
 @media (max-width:640px){.mf-row{grid-template-columns:1fr}}
+@media (min-width:901px){.cand{flex:0 0 auto;width:58%}.cand+.cand{margin-left:-14%}}
+@media (min-width:901px){.bio{left:12%;right:-6%;top:-28%;bottom:auto;padding:12px 15px;font-size:.84rem;line-height:1.4;border-radius:20px}.bio b{font-size:1.05rem;margin:2px 0 5px}.bio .r{font-size:.62rem;padding:1px 9px}}
 </style>
 </head>
 <body>
