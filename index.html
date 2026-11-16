@@ -351,8 +351,8 @@ header.top .fsz button{padding:3px 10px;font-size:.85rem}
 .share-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:6px}
 .btn.sm{padding:10px 16px;font-size:.92rem}
 .mold-top{display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center;margin-top:22px}
-.mold-top label.z{font-weight:700;color:var(--teal-dark);font-size:.95rem;display:flex;flex-direction:column;gap:6px;flex:1;min-width:220px;max-width:420px}
-.mold-top input[type=range]{width:100%}
+.mold-fig label.z{font-weight:700;color:var(--teal-dark);font-size:.85rem;display:flex;flex-direction:column;gap:4px}
+.mold-fig input[type=range]{width:100%}
 #moldura .hint{font-size:.9rem;color:var(--ink-soft);margin:12px 0 0}
 .mold-duo{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px;max-width:600px}
 .mold-fig{margin:0;background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:10px}
@@ -675,16 +675,15 @@ header.top .fsz button{padding:3px 10px;font-size:.85rem}
   <div class="wrap">
     <p class="eyebrow">Mostre que você apoia</p>
     <h2>Coloque a moldura da Chapa 1 na sua foto</h2>
-    <p class="lead">Escolha uma foto sua e veja as duas molduras lado a lado: use a que preferir ou baixe as duas. Arraste a foto para centralizar o rosto. A foto fica só no seu aparelho: nada é enviado para ninguém.</p>
+    <p class="lead">Escolha uma foto sua e veja as duas molduras lado a lado: use a que preferir ou baixe as duas. Ajuste cada moldura separadamente: arraste a foto e use o controle de zoom. A foto fica só no seu aparelho: nada é enviado para ninguém.</p>
     <div class="mold-top">
       <button type="button" class="btn sm" id="m-pick">Escolher minha foto</button>
-      <label class="z">Aproximar ou afastar<input type="range" id="m-zoom" min="100" max="400" value="100" disabled></label>
     </div>
     <input type="file" id="m-file" accept="image/*" hidden>
     <p class="hint" id="m-hint">No computador, você também pode arrastar a foto de uma pasta e soltá-la sobre uma das molduras.</p>
     <div class="mold-duo">
-      <figure class="mold-fig" id="fig-sq"><div class="mold-stage"><canvas width="1080" height="1080" aria-label="Moldura quadrada com a sua foto"></canvas></div><figcaption><strong>Quadrada</strong><span>Boa para foto de perfil e para postar no feed.</span></figcaption><div class="row"><button type="button" class="btn sm dark" data-a="dl" disabled>Baixar</button><button type="button" class="btn sm wa" data-a="sh" disabled>Compartilhar</button></div></figure>
-      <figure class="mold-fig" id="fig-ci"><div class="mold-stage"><canvas width="1080" height="1080" aria-label="Moldura circular com a sua foto"></canvas></div><figcaption><strong>Circular</strong><span>Fundo transparente: a foto fica redonda no perfil.</span></figcaption><div class="row"><button type="button" class="btn sm dark" data-a="dl" disabled>Baixar</button><button type="button" class="btn sm wa" data-a="sh" disabled>Compartilhar</button></div></figure>
+      <figure class="mold-fig" id="fig-sq"><div class="mold-stage"><canvas width="1080" height="1080" aria-label="Moldura quadrada com a sua foto"></canvas></div><figcaption><strong>Quadrada</strong><span>Boa para foto de perfil e para postar no feed.</span></figcaption><label class="z">Aproximar ou afastar<input type="range" class="zr" min="100" max="400" value="100" disabled></label><div class="row"><button type="button" class="btn sm dark" data-a="dl" disabled>Baixar</button><button type="button" class="btn sm wa" data-a="sh" disabled>Compartilhar</button></div></figure>
+      <figure class="mold-fig" id="fig-ci"><div class="mold-stage"><canvas width="1080" height="1080" aria-label="Moldura circular com a sua foto"></canvas></div><figcaption><strong>Circular</strong><span>Fundo transparente: a foto fica redonda no perfil.</span></figcaption><label class="z">Aproximar ou afastar<input type="range" class="zr" min="100" max="400" value="100" disabled></label><div class="row"><button type="button" class="btn sm dark" data-a="dl" disabled>Baixar</button><button type="button" class="btn sm wa" data-a="sh" disabled>Compartilhar</button></div></figure>
     </div>
     <div class="row mold-both"><button type="button" class="btn sm" id="m-both" disabled>Baixar as duas</button></div>
   </div>
@@ -906,15 +905,15 @@ if(sel){var o=document.createElement('option');o.value='';o.textContent='Todos o
 </script>
 <script>
 (function(){
-  var S=1080,photo=null,zm=1,nx=0,ny=0,hint=document.getElementById('m-hint'),file=document.getElementById('m-file'),zoom=document.getElementById('m-zoom'),bboth=document.getElementById('m-both');
+  var S=1080,photo=null,hint=document.getElementById('m-hint'),file=document.getElementById('m-file'),bboth=document.getElementById('m-both');
   var canFile=false;try{canFile=!!(navigator.canShare&&navigator.canShare({files:[new File([new Blob(['x'],{type:'image/jpeg'})],'a.jpg',{type:'image/jpeg'})]}))}catch(e){}
   var canCopy=!!(navigator.clipboard&&window.ClipboardItem);
   function mk(id,circ){
     var fig=document.getElementById(id),cv=fig.querySelector('canvas'),fr=new Image();
     var v={fig:fig,cv:cv,cx:cv.getContext('2d'),circ:circ,CX:540,CY:circ?540:505,R:circ?390:325,fr:fr,ext:circ?'png':'jpg',mime:circ?'image/png':'image/jpeg',
-      dl:fig.querySelector('[data-a=dl]'),sh:fig.querySelector('[data-a=sh]')};
+      zm:1,nx:0,ny:0,zr:fig.querySelector('.zr'),dl:fig.querySelector('[data-a=dl]'),sh:fig.querySelector('[data-a=sh]')};
     fr.onload=function(){draw(v)};fr.src=circ?'img/moldura_circular.png':'img/moldura_perfil.png';
-    v.bs=function(){return 2*v.R/Math.min(photo.width,photo.height)*zm};
+    v.bs=function(){return 2*v.R/Math.min(photo.width,photo.height)*v.zm};
     return v}
   var views=[mk('fig-sq',false),mk('fig-ci',true)];
   views.forEach(function(v){
@@ -922,33 +921,33 @@ if(sel){var o=document.createElement('option');o.value='';o.textContent='Todos o
   });
   function draw(v){
     var c=v.cx,R=v.R;c.clearRect(0,0,S,S);if(!v.circ){c.fillStyle='#dbe6f5';c.fillRect(0,0,S,S)}
-    if(photo){var k=v.bs(),w=photo.width*k,h=photo.height*k;c.save();c.beginPath();c.arc(v.CX,v.CY,R+(v.circ?4:10),0,7);c.clip();c.drawImage(photo,v.CX-w/2+nx*R,v.CY-h/2+ny*R,w,h);c.restore()}
+    if(photo){var k=v.bs(),w=photo.width*k,h=photo.height*k;c.save();c.beginPath();c.arc(v.CX,v.CY,R+(v.circ?4:10),0,7);c.clip();c.drawImage(photo,v.CX-w/2+v.nx*R,v.CY-h/2+v.ny*R,w,h);c.restore()}
     else{c.fillStyle='#fff';c.beginPath();c.arc(v.CX,v.CY,R,0,7);c.fill();c.fillStyle='#6b7f9c';c.font='600 34px sans-serif';c.textAlign='center';c.fillText('Sua foto aqui',v.CX,v.CY+10)}
     if(v.fr.complete)c.drawImage(v.fr,0,0,S,S)}
   function drawAll(){views.forEach(draw)}
-  function clamp(){var mx=9,my=9;views.forEach(function(v){var k=v.bs();mx=Math.min(mx,Math.max(0,(photo.width*k/2-v.R)/v.R));my=Math.min(my,Math.max(0,(photo.height*k/2-v.R)/v.R))});nx=Math.max(-mx,Math.min(mx,nx));ny=Math.max(-my,Math.min(my,ny))}
+  function clamp(v){var k=v.bs(),mx=Math.max(0,(photo.width*k/2-v.R)/v.R),my=Math.max(0,(photo.height*k/2-v.R)/v.R);v.nx=Math.max(-mx,Math.min(mx,v.nx));v.ny=Math.max(-my,Math.min(my,v.ny))}
   function load(f){
     if(!f||!/^image\//.test(f.type||'')){hint.textContent='Esse arquivo não é uma imagem. Use uma foto JPG ou PNG.';return}
     var im=new Image();
-    im.onload=function(){photo=im;zm=1;nx=0;ny=0;zoom.value=100;zoom.disabled=false;bboth.disabled=false;views.forEach(function(v){v.dl.disabled=false;v.sh.disabled=false});hint.textContent='Arraste a foto para centralizar o rosto e use o controle para aproximar. As duas molduras acompanham.';drawAll()};
+    im.onload=function(){photo=im;bboth.disabled=false;views.forEach(function(v){v.zm=1;v.nx=0;v.ny=0;v.zr.value=100;v.zr.disabled=false;v.dl.disabled=false;v.sh.disabled=false});hint.textContent='Ajuste cada moldura separadamente: arraste a foto para centralizar o rosto e use o controle para aproximar.';drawAll()};
     im.onerror=function(){hint.textContent='Não consegui abrir essa imagem. Tente outra foto (JPG ou PNG).'};
     im.src=URL.createObjectURL(f)}
   document.getElementById('m-pick').onclick=function(){file.click()};
   file.onchange=function(){load(file.files&&file.files[0])};
-  zoom.oninput=function(){zm=zoom.value/100;if(photo){clamp();drawAll()}};
   var drag=null;
   views.forEach(function(v){
     var cv=v.cv,stage=cv.parentNode;
     function pt(e){var r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*S/r.width,y:(e.clientY-r.top)*S/r.height}}
-    cv.addEventListener('pointerdown',function(e){if(!photo)return;var p=pt(e);drag={v:v,x:p.x,y:p.y,nx:nx,ny:ny};try{cv.setPointerCapture(e.pointerId)}catch(_){}cv.style.cursor='grabbing'});
-    cv.addEventListener('pointermove',function(e){if(!drag||drag.v!==v)return;var p=pt(e);nx=drag.nx+(p.x-drag.x)/v.R;ny=drag.ny+(p.y-drag.y)/v.R;clamp();drawAll()});
+    cv.addEventListener('pointerdown',function(e){if(!photo)return;var p=pt(e);drag={v:v,x:p.x,y:p.y,nx:v.nx,ny:v.ny};try{cv.setPointerCapture(e.pointerId)}catch(_){}cv.style.cursor='grabbing'});
+    cv.addEventListener('pointermove',function(e){if(!drag||drag.v!==v)return;var p=pt(e);v.nx=drag.nx+(p.x-drag.x)/v.R;v.ny=drag.ny+(p.y-drag.y)/v.R;clamp(v);draw(v)});
     function end(){drag=null;cv.style.cursor='grab'}
     cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);
-    cv.addEventListener('wheel',function(e){if(!photo)return;e.preventDefault();zoom.value=Math.max(100,Math.min(400,+zoom.value-e.deltaY/4));zoom.oninput()},{passive:false});
+    cv.addEventListener('wheel',function(e){if(!photo)return;e.preventDefault();v.zr.value=Math.max(100,Math.min(400,+v.zr.value-e.deltaY/4));v.zr.oninput()},{passive:false});
     cv.addEventListener('click',function(){if(!photo)file.click()});
     ['dragenter','dragover'].forEach(function(t){stage.addEventListener(t,function(e){e.preventDefault();stage.style.outline='4px dashed #1d5cc0'})});
     ['dragleave','drop'].forEach(function(t){stage.addEventListener(t,function(e){e.preventDefault();stage.style.outline=''})});
     stage.addEventListener('drop',function(e){load(e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0])});
+    v.zr.oninput=function(){v.zm=v.zr.value/100;if(photo){clamp(v);draw(v)}};
     function blob(cb){v.circ?cv.toBlob(cb,'image/png'):cv.toBlob(cb,'image/jpeg',0.93)}
     v.save=function(){blob(function(b){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='minha-foto-chapa1-'+(v.circ?'circular':'quadrada')+'.'+v.ext;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},4000)})};
     v.dl.onclick=v.save;
