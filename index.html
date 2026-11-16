@@ -357,6 +357,7 @@ header.top .fsz button{padding:3px 10px;font-size:.85rem}
 .mold-ctrl label.z{font-weight:700;color:var(--teal-dark);font-size:.95rem;display:flex;flex-direction:column;gap:6px}
 .mold-ctrl input[type=range]{width:100%}
 .mold-ctrl .row{display:flex;flex-wrap:wrap;gap:10px}
+.mold-mode .btn{background:#fff;color:var(--teal-dark);border:2px solid var(--teal);box-shadow:none}.mold-mode .btn.on{background:var(--teal);color:#fff}
 .mold-ctrl p.hint{font-size:.9rem;color:var(--ink-soft);margin:0}
 @media(max-width:700px){.mold-box{grid-template-columns:1fr}}
 
@@ -675,6 +676,7 @@ header.top .fsz button{padding:3px 10px;font-size:.85rem}
     <div class="mold-box">
       <div class="mold-stage"><canvas id="mc" width="1080" height="1080" aria-label="Prévia da moldura com a sua foto"></canvas></div>
       <div class="mold-ctrl">
+        <div class="row mold-mode" role="group" aria-label="Formato da moldura"><button type="button" class="btn sm on" id="m-sq" aria-pressed="true">Quadrada</button><button type="button" class="btn sm" id="m-ci" aria-pressed="false">Circular</button></div>
         <div class="row"><button type="button" class="btn sm" id="m-pick">Escolher minha foto</button></div>
         <p class="hint">No computador, você também pode arrastar a foto de uma pasta e soltá-la sobre a moldura.</p>
         <input type="file" id="m-file" accept="image/*" hidden>
@@ -902,12 +904,12 @@ if(sel){var o=document.createElement('option');o.value='';o.textContent='Todos o
 </script>
 <script>
 (function(){
-  var cv=document.getElementById('mc'),cx=cv.getContext('2d'),S=1080,CX=540,CY=505,R=325;
-  var frame=new Image(),photo=null,bs=1,zm=1,ox=0,oy=0,pick=document.getElementById('m-pick'),file=document.getElementById('m-file'),zoom=document.getElementById('m-zoom'),bsave=document.getElementById('m-save'),bshare=document.getElementById('m-share'),hint=document.getElementById('m-hint');
-  frame.onload=draw;frame.src='img/moldura_perfil.png';
+  var cv=document.getElementById('mc'),cx=cv.getContext('2d'),S=1080,CX=540,CY=505,R=325,circ=false;
+  var photo=null,bs=1,zm=1,ox=0,oy=0,pick=document.getElementById('m-pick'),file=document.getElementById('m-file'),zoom=document.getElementById('m-zoom'),bsave=document.getElementById('m-save'),bshare=document.getElementById('m-share'),hint=document.getElementById('m-hint');
+  var frames={sq:new Image(),ci:new Image()};frames.sq.onload=frames.ci.onload=function(){draw()};frames.sq.src='img/moldura_perfil.png';frames.ci.src='img/moldura_circular.png';
   function draw(){
-    cx.clearRect(0,0,S,S);cx.fillStyle='#dbe6f5';cx.fillRect(0,0,S,S);
-    if(photo){var w=photo.width*bs*zm,h=photo.height*bs*zm;cx.save();cx.beginPath();cx.arc(CX,CY,R+10,0,7);cx.clip();cx.drawImage(photo,CX-w/2+ox,CY-h/2+oy,w,h);cx.restore()}
+    cx.clearRect(0,0,S,S);var frame=circ?frames.ci:frames.sq;if(!circ){cx.fillStyle='#dbe6f5';cx.fillRect(0,0,S,S)}
+    if(photo){var w=photo.width*bs*zm,h=photo.height*bs*zm;cx.save();cx.beginPath();cx.arc(CX,CY,R+(circ?4:10),0,7);cx.clip();cx.drawImage(photo,CX-w/2+ox,CY-h/2+oy,w,h);cx.restore()}
     else{cx.fillStyle='#fff';cx.beginPath();cx.arc(CX,CY,R,0,7);cx.fill();cx.fillStyle='#6b7f9c';cx.font='600 34px sans-serif';cx.textAlign='center';cx.fillText('Sua foto aqui',CX,CY+10)}
     if(frame.complete)cx.drawImage(frame,0,0,S,S);
   }
@@ -934,8 +936,12 @@ if(sel){var o=document.createElement('option');o.value='';o.textContent='Todos o
   function end(){drag=null;cv.style.cursor='grab'}
   cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);
   cv.addEventListener('wheel',function(e){if(!photo)return;e.preventDefault();var v=Math.max(100,Math.min(400,+zoom.value-e.deltaY/4));zoom.value=v;zoom.oninput()},{passive:false});
-  function blob(cb){cv.toBlob(cb,'image/jpeg',0.93)}
-  bsave.onclick=function(){blob(function(b){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='minha-foto-chapa1.jpg';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},4000)})};
+  function blob(cb){circ?cv.toBlob(cb,'image/png'):cv.toBlob(cb,'image/jpeg',0.93)}
+  function ext(){return circ?'png':'jpg'}
+  function mime(){return circ?'image/png':'image/jpeg'}
+  function setMode(c){circ=c;CX=540;CY=c?540:505;R=c?390:325;if(photo){bs=(2*R)/Math.min(photo.width,photo.height);zm=1;ox=0;oy=0;zoom.value=100}document.getElementById('m-sq').className='btn sm'+(c?'':' on');document.getElementById('m-ci').className='btn sm'+(c?' on':'');document.getElementById('m-sq').setAttribute('aria-pressed',!c);document.getElementById('m-ci').setAttribute('aria-pressed',c);draw()}
+  document.getElementById('m-sq').onclick=function(){setMode(false)};document.getElementById('m-ci').onclick=function(){setMode(true)};
+  bsave.onclick=function(){blob(function(b){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='minha-foto-chapa1.'+ext();document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},4000)})};
   var canFile=false;
   try{canFile=!!(navigator.canShare&&navigator.canShare({files:[new File([new Blob(['x'],{type:'image/jpeg'})],'a.jpg',{type:'image/jpeg'})]}))}catch(e){}
   var canCopy=!!(navigator.clipboard&&window.ClipboardItem);
@@ -943,7 +949,7 @@ if(sel){var o=document.createElement('option');o.value='';o.textContent='Todos o
   else if(canCopy){bshare.textContent='Copiar imagem';bshare.className='btn sm';}
   else{bshare.style.display='none'}
   bshare.onclick=function(){
-    if(canFile){blob(function(b){var f=new File([b],'minha-foto-chapa1.jpg',{type:'image/jpeg'});navigator.share({files:[f],text:'Eu voto Chapa 1! www.votechapa1.netlify.app'}).catch(function(){})})}
+    if(canFile){blob(function(b){var f=new File([b],'minha-foto-chapa1.'+ext(),{type:mime()});navigator.share({files:[f],text:'Eu voto Chapa 1! www.votechapa1.netlify.app'}).catch(function(){})})}
     else{cv.toBlob(function(b){navigator.clipboard.write([new ClipboardItem({'image/png':b})]).then(function(){hint.textContent='Imagem copiada! Agora é só colar (Ctrl+V) na conversa ou na publicação.'}).catch(function(){hint.textContent='Não consegui copiar. Use o botão Baixar imagem.'})},'image/png')}
   };
 })();
