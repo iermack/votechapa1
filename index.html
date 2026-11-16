@@ -676,6 +676,7 @@ header.top .fsz button{padding:3px 10px;font-size:.85rem}
       <div class="mold-stage"><canvas id="mc" width="1080" height="1080" aria-label="Prévia da moldura com a sua foto"></canvas></div>
       <div class="mold-ctrl">
         <div class="row"><button type="button" class="btn sm" id="m-pick">Escolher minha foto</button></div>
+        <p class="hint">No computador, você também pode arrastar a foto de uma pasta e soltá-la sobre a moldura.</p>
         <input type="file" id="m-file" accept="image/*" hidden>
         <label class="z">Aproximar ou afastar<input type="range" id="m-zoom" min="100" max="400" value="100" disabled></label>
         <p class="hint" id="m-hint">Depois de escolher a foto, arraste-a com o dedo ou o mouse para centralizar o rosto no círculo.</p>
@@ -912,15 +913,21 @@ if(sel){var o=document.createElement('option');o.value='';o.textContent='Todos o
   }
   function clamp(){var w=photo.width*bs*zm,h=photo.height*bs*zm,mx=Math.max(0,(w/2-R)),my=Math.max(0,(h/2-R));ox=Math.max(-mx,Math.min(mx,ox));oy=Math.max(-my,Math.min(my,oy))}
   pick.onclick=function(){file.click()};
-  file.onchange=function(){
-    var f=file.files&&file.files[0];if(!f)return;
+  function load(f){
+    if(!f||!/^image\//.test(f.type||'')){hint.textContent='Esse arquivo não é uma imagem. Use uma foto JPG ou PNG.';return}
     var url=URL.createObjectURL(f),im=new Image();
     im.onload=function(){photo=im;bs=(2*R)/Math.min(im.width,im.height);zm=1;ox=0;oy=0;zoom.value=100;zoom.disabled=false;bsave.disabled=false;bshare.disabled=false;hint.textContent='Arraste a foto para centralizar o rosto no círculo e use o controle para aproximar.';draw()};
     im.onerror=function(){hint.textContent='Não consegui abrir essa imagem. Tente outra foto (JPG ou PNG).'};
     im.src=url;
-  };
+  }
+  file.onchange=function(){load(file.files&&file.files[0])};
+  var stage=cv.parentNode;
+  ['dragenter','dragover'].forEach(function(t){stage.addEventListener(t,function(e){e.preventDefault();stage.style.outline='4px dashed #1d5cc0'})});
+  ['dragleave','drop'].forEach(function(t){stage.addEventListener(t,function(e){e.preventDefault();stage.style.outline=''})});
+  stage.addEventListener('drop',function(e){var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];load(f)});
+  cv.addEventListener('click',function(){if(!photo&&!dragMoved)file.click()});
   zoom.oninput=function(){zm=zoom.value/100;if(photo){clamp();draw()}};
-  var drag=null;
+  var drag=null,dragMoved=false;
   function pt(e){var r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*S/r.width,y:(e.clientY-r.top)*S/r.height}}
   cv.addEventListener('pointerdown',function(e){if(!photo)return;var p=pt(e);drag={x:p.x,y:p.y,ox:ox,oy:oy};try{cv.setPointerCapture(e.pointerId)}catch(_){}cv.style.cursor='grabbing'});
   cv.addEventListener('pointermove',function(e){if(!drag)return;var p=pt(e);ox=drag.ox+p.x-drag.x;oy=drag.oy+p.y-drag.y;clamp();draw()});
