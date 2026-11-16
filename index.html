@@ -338,6 +338,19 @@ header.top .fsz button{padding:3px 10px;font-size:.85rem}
 @media(max-width:560px){header.top .wrap{gap:2px 10px;min-height:0;padding-top:6px;padding-bottom:4px}header.top .brand{font-size:1.05rem;gap:8px}header.top .brand .num{font-size:1.15rem;padding:2px 9px}header.top .brand small{font-size:.66rem}header.top .fsz{margin-left:0;gap:4px}header.top .fsz button{padding:2px 8px;font-size:.8rem}header.top nav{gap:0 11px}header.top nav a{font-size:.86rem}}
 .rt-note{font-size:.9rem;color:var(--ink-soft);margin:10px 0 0}
 @media(max-width:560px){.rt-row{grid-template-columns:1fr;gap:4px}}
+
+/* divulgação */
+.share-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:22px;margin-top:26px}
+.share-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.share-card img{display:block;width:100%;height:280px;object-fit:contain;background:#eef3fb;border-radius:14px}
+.share-card h3{font-size:1.1rem;color:var(--teal-dark);margin:4px 0 0}
+.share-card .use{display:inline-block;align-self:flex-start;font-size:.74rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-dark);background:#dcebfb;border-radius:999px;padding:3px 11px}
+.share-card p{font-size:.93rem;color:var(--ink-soft);margin:0}
+.share-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:6px}
+.btn.sm{padding:10px 16px;font-size:.92rem}
+.btn.wa{background:#25d366;color:#06361b}
+.btn.ig{background:linear-gradient(45deg,#f9a825,#e1306c 55%,#833ab4);color:#fff}
+.sh-msg{margin-top:18px;padding:12px 16px;border-radius:12px;background:#e2f4e8;color:#14532d;font-weight:600}
 </style>
 </head>
 <body>
@@ -641,12 +654,46 @@ header.top .fsz button{padding:3px 10px;font-size:.85rem}
   </div>
 </section>
 
+
+<section id="divulgar" class="alt">
+  <div class="wrap">
+    <p class="eyebrow">Divulgue a Chapa 1</p>
+    <h2>Artes para compartilhar</h2>
+    <p class="lead">Quer ajudar a divulgar? Salve as imagens ou envie direto para os seus contatos e redes. Todas levam o endereço do site e um QR code.</p>
+    <div class="share-grid">
+      <article class="share-card" data-name="chapa1-arte-quadrada.jpg">
+        <img src="img/divulga_quadrada.jpg" alt="Arte quadrada da Chapa 1 com Flávio Magno e Ricardo Gandini" width="1080" height="1080" loading="lazy">
+        <h3>Arte quadrada</h3>
+        <span class="use">WhatsApp e Status · feed do Instagram</span>
+        <p>Apresenta a chapa e a data da eleição. Boa para conversas, Status do WhatsApp e publicação no feed.</p>
+        <div class="share-btns"><button type="button" class="btn sm wa" data-act="wa">Enviar pelo WhatsApp</button><button type="button" class="btn sm dark" data-act="dl">Salvar imagem</button></div>
+      </article>
+      <article class="share-card" data-name="chapa1-resumo-das-propostas.jpg">
+        <img src="img/divulga_propostas.jpg" alt="Resumo vertical das propostas da Chapa 1" width="1080" height="2079" loading="lazy">
+        <h3>Resumo das propostas</h3>
+        <span class="use">WhatsApp · grupos e conversas</span>
+        <p>Imagem vertical, fácil de ler no celular, com o resumo do que a chapa propõe se for eleita.</p>
+        <div class="share-btns"><button type="button" class="btn sm wa" data-act="wa">Enviar pelo WhatsApp</button><button type="button" class="btn sm dark" data-act="dl">Salvar imagem</button></div>
+      </article>
+      <article class="share-card" data-name="chapa1-story-instagram.jpg">
+        <img src="img/divulga_story.jpg" alt="Story da Chapa 1 para o Instagram" width="1080" height="1920" loading="lazy">
+        <h3>Story do Instagram</h3>
+        <span class="use">Instagram · Stories</span>
+        <p>No formato de tela cheia do story (1080 x 1920). Dica: no Instagram, adicione o adesivo “Link” com o endereço do site.</p>
+        <div class="share-btns"><button type="button" class="btn sm ig" data-act="ig">Postar no Instagram</button><button type="button" class="btn sm dark" data-act="dl">Salvar imagem</button></div>
+      </article>
+    </div>
+    <p class="sh-msg" id="sh-msg" role="status" hidden></p>
+  </div>
+</section>
+
 </main>
 
 <footer>
   <div class="wrap">
     <p><strong>Copyright © 2026 Chapa 1 · Conselho Deliberativo do Agros</strong></p>
     <p>Material de campanha eleitoral da Chapa 1, produzido pela própria chapa e sem vínculo institucional com o Agros ou com a UFV. Este site não é o site do Agros e não usa o nome, o logotipo ou a estrutura do Instituto. Informações oficiais sobre a eleição estão no site do Agros e com a Comissão Eleitoral.</p>
+    <p><a href="#divulgar" style="color:inherit;font-weight:700">Divulgue a Chapa 1: artes para compartilhar</a></p>
     <p class="credit">Site desenvolvido por Iermack Maduro França</p>
   </div>
 </footer>
@@ -784,6 +831,42 @@ if(sel){var o=document.createElement('option');o.value='';o.textContent='Todos o
   function upd(){var on=(window.pageYOffset||document.documentElement.scrollTop)>500;t.classList.toggle('off',!on);t.setAttribute('tabindex',on?'0':'-1')}
   window.addEventListener('scroll',upd,{passive:true});upd();
   t.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+})();
+</script>
+
+<script>
+(function(){
+  var msg=document.getElementById('sh-msg'),TXT='Conheça a *Chapa 1 (Flávio e Ricardo)* para o Conselho Deliberativo do Agros. A eleição é em 27/11.\nhttps://www.votechapa1.netlify.app',files={},timer;
+  function say(t){msg.textContent=t;msg.hidden=false;clearTimeout(timer);timer=setTimeout(function(){msg.hidden=true},12000)}
+  function save(img,name){var a=document.createElement('a');a.href=img.currentSrc||img.src;a.download=name;document.body.appendChild(a);a.click();a.remove()}
+  function prep(card){
+    var img=card.querySelector('img'),name=card.getAttribute('data-name');
+    try{fetch(img.currentSrc||img.src).then(function(r){return r.blob()}).then(function(b){files[name]=new File([b],name,{type:b.type||'image/jpeg'})}).catch(function(){})}catch(e){}
+  }
+  var cards=[].slice.call(document.querySelectorAll('.share-card'));
+  function prepAll(){cards.forEach(prep)}
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(en){if(en[0].isIntersecting){prepAll();io.disconnect()}},{rootMargin:'400px'});io.observe(document.getElementById('divulgar'))}else{prepAll()}
+  cards.forEach(function(card){
+    var img=card.querySelector('img'),name=card.getAttribute('data-name');
+    card.addEventListener('click',function(e){
+      var b=e.target.closest('button[data-act]');if(!b)return;
+      var act=b.getAttribute('data-act');
+      if(act==='dl'){save(img,name);say('Imagem salva. Procure na galeria ou na pasta de downloads do seu aparelho.');return}
+      var f=files[name];
+      if(f&&navigator.canShare&&navigator.canShare({files:[f]})){
+        navigator.share(act==='wa'?{files:[f],text:TXT}:{files:[f]}).catch(function(){});
+        return;
+      }
+      save(img,name);
+      if(act==='wa'){
+        say('Imagem salva. No WhatsApp, toque em anexar e escolha a imagem.');
+        window.open('https://wa.me/?text='+encodeURIComponent(TXT),'_blank','noopener');
+      }else{
+        say('Imagem salva. No Instagram, crie um story e escolha esta imagem.');
+        if(/Android|iPhone|iPad/i.test(navigator.userAgent)){setTimeout(function(){location.href='instagram://story-camera'},900)}
+      }
+    });
+  });
 })();
 </script>
 </body>
