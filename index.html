@@ -350,6 +350,16 @@ header.top .fsz button{padding:3px 10px;font-size:.85rem}
 .share-card p{font-size:.93rem;color:var(--ink-soft);margin:0}
 .share-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:6px}
 .btn.sm{padding:10px 16px;font-size:.92rem}
+.mold-box{display:grid;grid-template-columns:minmax(260px,440px) 1fr;gap:28px;align-items:center;margin-top:26px}
+.mold-stage{position:relative;width:100%;aspect-ratio:1;border-radius:20px;overflow:hidden;background:#eef3fb;border:1px solid var(--line);touch-action:none}
+.mold-stage canvas{display:block;width:100%;height:100%;cursor:grab}
+.mold-ctrl{display:flex;flex-direction:column;gap:14px}
+.mold-ctrl label.z{font-weight:700;color:var(--teal-dark);font-size:.95rem;display:flex;flex-direction:column;gap:6px}
+.mold-ctrl input[type=range]{width:100%}
+.mold-ctrl .row{display:flex;flex-wrap:wrap;gap:10px}
+.mold-ctrl p.hint{font-size:.9rem;color:var(--ink-soft);margin:0}
+@media(max-width:700px){.mold-box{grid-template-columns:1fr}}
+
 .btn.wa{background:#25d366;color:#06361b}
 .btn.ig{background:linear-gradient(45deg,#f9a825,#e1306c 55%,#833ab4);color:#fff}
 .sh-msg{margin-top:18px;padding:12px 16px;border-radius:12px;background:#e2f4e8;color:#14532d;font-weight:600}
@@ -657,6 +667,24 @@ header.top .fsz button{padding:3px 10px;font-size:.85rem}
 </section>
 
 
+<section id="moldura">
+  <div class="wrap">
+    <p class="eyebrow">Mostre que você apoia</p>
+    <h2>Coloque a moldura da Chapa 1 na sua foto</h2>
+    <p class="lead">Escolha uma foto sua, ajuste o enquadramento e baixe a imagem pronta para usar como foto de perfil no WhatsApp, Instagram ou Facebook. A foto fica só no seu aparelho: nada é enviado para ninguém.</p>
+    <div class="mold-box">
+      <div class="mold-stage"><canvas id="mc" width="1080" height="1080" aria-label="Prévia da moldura com a sua foto"></canvas></div>
+      <div class="mold-ctrl">
+        <div class="row"><button type="button" class="btn sm" id="m-pick">Escolher minha foto</button></div>
+        <input type="file" id="m-file" accept="image/*" hidden>
+        <label class="z">Aproximar ou afastar<input type="range" id="m-zoom" min="100" max="400" value="100" disabled></label>
+        <p class="hint" id="m-hint">Depois de escolher a foto, arraste-a com o dedo ou o mouse para centralizar o rosto no círculo.</p>
+        <div class="row"><button type="button" class="btn sm dark" id="m-save" disabled>Baixar imagem</button><button type="button" class="btn sm wa" id="m-share" disabled>Compartilhar</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="divulgar" class="alt">
   <div class="wrap">
     <p class="eyebrow">Divulgue a Chapa 1</p>
@@ -695,7 +723,7 @@ header.top .fsz button{padding:3px 10px;font-size:.85rem}
   <div class="wrap">
     <p><strong>Copyright © 2026 Chapa 1 · Conselho Deliberativo do Agros</strong></p>
     <p>Material de campanha eleitoral da Chapa 1, produzido pela própria chapa e sem vínculo institucional com o Agros ou com a UFV. Este site não é o site do Agros e não usa o nome, o logotipo ou a estrutura do Instituto. Informações oficiais sobre a eleição estão no site do Agros e com a Comissão Eleitoral.</p>
-    <p><a href="#divulgar" style="color:inherit;font-weight:700">Divulgue a Chapa 1: artes para compartilhar</a></p>
+    <p><a href="#moldura" style="color:inherit;font-weight:700">Coloque a moldura da Chapa 1 na sua foto</a> · <a href="#divulgar" style="color:inherit;font-weight:700">Artes para compartilhar</a></p>
     <p class="credit">Site desenvolvido por Iermack Maduro França</p>
   </div>
 </footer>
@@ -869,6 +897,41 @@ if(sel){var o=document.createElement('option');o.value='';o.textContent='Todos o
       }
     });
   });
+})();
+</script>
+<script>
+(function(){
+  var cv=document.getElementById('mc'),cx=cv.getContext('2d'),S=1080,CX=540,CY=505,R=325;
+  var frame=new Image(),photo=null,bs=1,zm=1,ox=0,oy=0,pick=document.getElementById('m-pick'),file=document.getElementById('m-file'),zoom=document.getElementById('m-zoom'),bsave=document.getElementById('m-save'),bshare=document.getElementById('m-share'),hint=document.getElementById('m-hint');
+  frame.onload=draw;frame.src='img/moldura_perfil.png';
+  function draw(){
+    cx.clearRect(0,0,S,S);cx.fillStyle='#dbe6f5';cx.fillRect(0,0,S,S);
+    if(photo){var w=photo.width*bs*zm,h=photo.height*bs*zm;cx.save();cx.beginPath();cx.arc(CX,CY,R+10,0,7);cx.clip();cx.drawImage(photo,CX-w/2+ox,CY-h/2+oy,w,h);cx.restore()}
+    else{cx.fillStyle='#fff';cx.beginPath();cx.arc(CX,CY,R,0,7);cx.fill();cx.fillStyle='#6b7f9c';cx.font='600 34px sans-serif';cx.textAlign='center';cx.fillText('Sua foto aqui',CX,CY+10)}
+    if(frame.complete)cx.drawImage(frame,0,0,S,S);
+  }
+  function clamp(){var w=photo.width*bs*zm,h=photo.height*bs*zm,mx=Math.max(0,(w/2-R)),my=Math.max(0,(h/2-R));ox=Math.max(-mx,Math.min(mx,ox));oy=Math.max(-my,Math.min(my,oy))}
+  pick.onclick=function(){file.click()};
+  file.onchange=function(){
+    var f=file.files&&file.files[0];if(!f)return;
+    var url=URL.createObjectURL(f),im=new Image();
+    im.onload=function(){photo=im;bs=(2*R)/Math.min(im.width,im.height);zm=1;ox=0;oy=0;zoom.value=100;zoom.disabled=false;bsave.disabled=false;bshare.disabled=false;hint.textContent='Arraste a foto para centralizar o rosto no círculo e use o controle para aproximar.';draw()};
+    im.onerror=function(){hint.textContent='Não consegui abrir essa imagem. Tente outra foto (JPG ou PNG).'};
+    im.src=url;
+  };
+  zoom.oninput=function(){zm=zoom.value/100;if(photo){clamp();draw()}};
+  var drag=null;
+  function pt(e){var r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*S/r.width,y:(e.clientY-r.top)*S/r.height}}
+  cv.addEventListener('pointerdown',function(e){if(!photo)return;var p=pt(e);drag={x:p.x,y:p.y,ox:ox,oy:oy};try{cv.setPointerCapture(e.pointerId)}catch(_){}cv.style.cursor='grabbing'});
+  cv.addEventListener('pointermove',function(e){if(!drag)return;var p=pt(e);ox=drag.ox+p.x-drag.x;oy=drag.oy+p.y-drag.y;clamp();draw()});
+  function end(){drag=null;cv.style.cursor='grab'}
+  cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);
+  cv.addEventListener('wheel',function(e){if(!photo)return;e.preventDefault();var v=Math.max(100,Math.min(400,+zoom.value-e.deltaY/4));zoom.value=v;zoom.oninput()},{passive:false});
+  function blob(cb){cv.toBlob(cb,'image/jpeg',0.93)}
+  bsave.onclick=function(){blob(function(b){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='minha-foto-chapa1.jpg';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},4000)})};
+  bshare.onclick=function(){blob(function(b){var f=new File([b],'minha-foto-chapa1.jpg',{type:'image/jpeg'});
+    if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],text:'Eu voto Chapa 1! www.votechapa1.netlify.app'}).catch(function(){})}
+    else{bsave.onclick();hint.textContent='Imagem baixada. Agora é só usá-la como foto de perfil ou enviá-la pelo seu aplicativo.'}})};
 })();
 </script>
 </body>
