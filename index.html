@@ -936,9 +936,16 @@ if(sel){var o=document.createElement('option');o.value='';o.textContent='Todos o
   cv.addEventListener('wheel',function(e){if(!photo)return;e.preventDefault();var v=Math.max(100,Math.min(400,+zoom.value-e.deltaY/4));zoom.value=v;zoom.oninput()},{passive:false});
   function blob(cb){cv.toBlob(cb,'image/jpeg',0.93)}
   bsave.onclick=function(){blob(function(b){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='minha-foto-chapa1.jpg';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},4000)})};
-  bshare.onclick=function(){blob(function(b){var f=new File([b],'minha-foto-chapa1.jpg',{type:'image/jpeg'});
-    if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],text:'Eu voto Chapa 1! www.votechapa1.netlify.app'}).catch(function(){})}
-    else{bsave.onclick();hint.textContent='Imagem baixada. Agora é só usá-la como foto de perfil ou enviá-la pelo seu aplicativo.'}})};
+  var canFile=false;
+  try{canFile=!!(navigator.canShare&&navigator.canShare({files:[new File([new Blob(['x'],{type:'image/jpeg'})],'a.jpg',{type:'image/jpeg'})]}))}catch(e){}
+  var canCopy=!!(navigator.clipboard&&window.ClipboardItem);
+  if(canFile){bshare.textContent='Compartilhar'}
+  else if(canCopy){bshare.textContent='Copiar imagem';bshare.className='btn sm';}
+  else{bshare.style.display='none'}
+  bshare.onclick=function(){
+    if(canFile){blob(function(b){var f=new File([b],'minha-foto-chapa1.jpg',{type:'image/jpeg'});navigator.share({files:[f],text:'Eu voto Chapa 1! www.votechapa1.netlify.app'}).catch(function(){})})}
+    else{cv.toBlob(function(b){navigator.clipboard.write([new ClipboardItem({'image/png':b})]).then(function(){hint.textContent='Imagem copiada! Agora é só colar (Ctrl+V) na conversa ou na publicação.'}).catch(function(){hint.textContent='Não consegui copiar. Use o botão Baixar imagem.'})},'image/png')}
+  };
 })();
 </script>
 </body>
