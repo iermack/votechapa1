@@ -350,16 +350,19 @@ header.top .fsz button{padding:3px 10px;font-size:.85rem}
 .share-card p{font-size:.93rem;color:var(--ink-soft);margin:0}
 .share-btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:6px}
 .btn.sm{padding:10px 16px;font-size:.92rem}
-.mold-box{display:grid;grid-template-columns:minmax(260px,440px) 1fr;gap:28px;align-items:center;margin-top:26px}
-.mold-stage{position:relative;width:100%;aspect-ratio:1;border-radius:20px;overflow:hidden;background:#eef3fb;border:1px solid var(--line);touch-action:none}
+.mold-top{display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center;margin-top:22px}
+.mold-top label.z{font-weight:700;color:var(--teal-dark);font-size:.95rem;display:flex;flex-direction:column;gap:6px;flex:1;min-width:220px;max-width:420px}
+.mold-top input[type=range]{width:100%}
+#moldura .hint{font-size:.9rem;color:var(--ink-soft);margin:12px 0 0}
+.mold-duo{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:18px}
+.mold-fig{margin:0;background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.mold-stage{position:relative;width:100%;aspect-ratio:1;border-radius:14px;overflow:hidden;background:#eef3fb;touch-action:none}
 .mold-stage canvas{display:block;width:100%;height:100%;cursor:grab}
-.mold-ctrl{display:flex;flex-direction:column;gap:14px}
-.mold-ctrl label.z{font-weight:700;color:var(--teal-dark);font-size:.95rem;display:flex;flex-direction:column;gap:6px}
-.mold-ctrl input[type=range]{width:100%}
-.mold-ctrl .row{display:flex;flex-wrap:wrap;gap:10px}
-.mold-mode .btn{background:#fff;color:var(--teal-dark);border:2px solid var(--teal);box-shadow:none}.mold-mode .btn.on{background:var(--teal);color:#fff}
-.mold-ctrl p.hint{font-size:.9rem;color:var(--ink-soft);margin:0}
-@media(max-width:700px){.mold-box{grid-template-columns:1fr}}
+.mold-fig figcaption strong{display:block;color:var(--teal-dark);font-size:1.05rem}
+.mold-fig figcaption span{font-size:.9rem;color:var(--ink-soft)}
+.mold-fig .row,.mold-both{display:flex;flex-wrap:wrap;gap:10px}
+.mold-both{margin-top:18px}
+@media(max-width:620px){.mold-duo{grid-template-columns:1fr}}
 
 .btn.wa{background:#25d366;color:#06361b}
 .btn.ig{background:linear-gradient(45deg,#f9a825,#e1306c 55%,#833ab4);color:#fff}
@@ -672,19 +675,18 @@ header.top .fsz button{padding:3px 10px;font-size:.85rem}
   <div class="wrap">
     <p class="eyebrow">Mostre que você apoia</p>
     <h2>Coloque a moldura da Chapa 1 na sua foto</h2>
-    <p class="lead">Escolha uma foto sua, ajuste o enquadramento e baixe a imagem pronta para usar como foto de perfil no WhatsApp, Instagram ou Facebook. A foto fica só no seu aparelho: nada é enviado para ninguém.</p>
-    <div class="mold-box">
-      <div class="mold-stage"><canvas id="mc" width="1080" height="1080" aria-label="Prévia da moldura com a sua foto"></canvas></div>
-      <div class="mold-ctrl">
-        <div class="row mold-mode" role="group" aria-label="Formato da moldura"><button type="button" class="btn sm on" id="m-sq" aria-pressed="true">Quadrada</button><button type="button" class="btn sm" id="m-ci" aria-pressed="false">Circular</button></div>
-        <div class="row"><button type="button" class="btn sm" id="m-pick">Escolher minha foto</button></div>
-        <p class="hint">No computador, você também pode arrastar a foto de uma pasta e soltá-la sobre a moldura.</p>
-        <input type="file" id="m-file" accept="image/*" hidden>
-        <label class="z">Aproximar ou afastar<input type="range" id="m-zoom" min="100" max="400" value="100" disabled></label>
-        <p class="hint" id="m-hint">Depois de escolher a foto, arraste-a com o dedo ou o mouse para centralizar o rosto no círculo.</p>
-        <div class="row"><button type="button" class="btn sm dark" id="m-save" disabled>Baixar imagem</button><button type="button" class="btn sm wa" id="m-share" disabled>Compartilhar</button></div>
-      </div>
+    <p class="lead">Escolha uma foto sua e veja as duas molduras lado a lado: use a que preferir ou baixe as duas. Arraste a foto para centralizar o rosto. A foto fica só no seu aparelho: nada é enviado para ninguém.</p>
+    <div class="mold-top">
+      <button type="button" class="btn sm" id="m-pick">Escolher minha foto</button>
+      <label class="z">Aproximar ou afastar<input type="range" id="m-zoom" min="100" max="400" value="100" disabled></label>
     </div>
+    <input type="file" id="m-file" accept="image/*" hidden>
+    <p class="hint" id="m-hint">No computador, você também pode arrastar a foto de uma pasta e soltá-la sobre uma das molduras.</p>
+    <div class="mold-duo">
+      <figure class="mold-fig" id="fig-sq"><div class="mold-stage"><canvas width="1080" height="1080" aria-label="Moldura quadrada com a sua foto"></canvas></div><figcaption><strong>Quadrada</strong><span>Boa para foto de perfil e para postar no feed.</span></figcaption><div class="row"><button type="button" class="btn sm dark" data-a="dl" disabled>Baixar</button><button type="button" class="btn sm wa" data-a="sh" disabled>Compartilhar</button></div></figure>
+      <figure class="mold-fig" id="fig-ci"><div class="mold-stage"><canvas width="1080" height="1080" aria-label="Moldura circular com a sua foto"></canvas></div><figcaption><strong>Circular</strong><span>Fundo transparente: a foto fica redonda no perfil.</span></figcaption><div class="row"><button type="button" class="btn sm dark" data-a="dl" disabled>Baixar</button><button type="button" class="btn sm wa" data-a="sh" disabled>Compartilhar</button></div></figure>
+    </div>
+    <div class="row mold-both"><button type="button" class="btn sm" id="m-both" disabled>Baixar as duas</button></div>
   </div>
 </section>
 
@@ -904,54 +906,58 @@ if(sel){var o=document.createElement('option');o.value='';o.textContent='Todos o
 </script>
 <script>
 (function(){
-  var cv=document.getElementById('mc'),cx=cv.getContext('2d'),S=1080,CX=540,CY=505,R=325,circ=false;
-  var photo=null,bs=1,zm=1,ox=0,oy=0,pick=document.getElementById('m-pick'),file=document.getElementById('m-file'),zoom=document.getElementById('m-zoom'),bsave=document.getElementById('m-save'),bshare=document.getElementById('m-share'),hint=document.getElementById('m-hint');
-  var frames={sq:new Image(),ci:new Image()};frames.sq.onload=frames.ci.onload=function(){draw()};frames.sq.src='img/moldura_perfil.png';frames.ci.src='img/moldura_circular.png';
-  function draw(){
-    cx.clearRect(0,0,S,S);var frame=circ?frames.ci:frames.sq;if(!circ){cx.fillStyle='#dbe6f5';cx.fillRect(0,0,S,S)}
-    if(photo){var w=photo.width*bs*zm,h=photo.height*bs*zm;cx.save();cx.beginPath();cx.arc(CX,CY,R+(circ?4:10),0,7);cx.clip();cx.drawImage(photo,CX-w/2+ox,CY-h/2+oy,w,h);cx.restore()}
-    else{cx.fillStyle='#fff';cx.beginPath();cx.arc(CX,CY,R,0,7);cx.fill();cx.fillStyle='#6b7f9c';cx.font='600 34px sans-serif';cx.textAlign='center';cx.fillText('Sua foto aqui',CX,CY+10)}
-    if(frame.complete)cx.drawImage(frame,0,0,S,S);
-  }
-  function clamp(){var w=photo.width*bs*zm,h=photo.height*bs*zm,mx=Math.max(0,(w/2-R)),my=Math.max(0,(h/2-R));ox=Math.max(-mx,Math.min(mx,ox));oy=Math.max(-my,Math.min(my,oy))}
-  pick.onclick=function(){file.click()};
+  var S=1080,photo=null,zm=1,nx=0,ny=0,hint=document.getElementById('m-hint'),file=document.getElementById('m-file'),zoom=document.getElementById('m-zoom'),bboth=document.getElementById('m-both');
+  var canFile=false;try{canFile=!!(navigator.canShare&&navigator.canShare({files:[new File([new Blob(['x'],{type:'image/jpeg'})],'a.jpg',{type:'image/jpeg'})]}))}catch(e){}
+  var canCopy=!!(navigator.clipboard&&window.ClipboardItem);
+  function mk(id,circ){
+    var fig=document.getElementById(id),cv=fig.querySelector('canvas'),fr=new Image();
+    var v={fig:fig,cv:cv,cx:cv.getContext('2d'),circ:circ,CX:540,CY:circ?540:505,R:circ?390:325,fr:fr,ext:circ?'png':'jpg',mime:circ?'image/png':'image/jpeg',
+      dl:fig.querySelector('[data-a=dl]'),sh:fig.querySelector('[data-a=sh]')};
+    fr.onload=function(){draw(v)};fr.src=circ?'img/moldura_circular.png':'img/moldura_perfil.png';
+    v.bs=function(){return 2*v.R/Math.min(photo.width,photo.height)*zm};
+    return v}
+  var views=[mk('fig-sq',false),mk('fig-ci',true)];
+  views.forEach(function(v){
+    if(canFile)v.sh.textContent='Compartilhar';else if(canCopy){v.sh.textContent='Copiar imagem';v.sh.className='btn sm'}else v.sh.style.display='none';
+  });
+  function draw(v){
+    var c=v.cx,R=v.R;c.clearRect(0,0,S,S);if(!v.circ){c.fillStyle='#dbe6f5';c.fillRect(0,0,S,S)}
+    if(photo){var k=v.bs(),w=photo.width*k,h=photo.height*k;c.save();c.beginPath();c.arc(v.CX,v.CY,R+(v.circ?4:10),0,7);c.clip();c.drawImage(photo,v.CX-w/2+nx*R,v.CY-h/2+ny*R,w,h);c.restore()}
+    else{c.fillStyle='#fff';c.beginPath();c.arc(v.CX,v.CY,R,0,7);c.fill();c.fillStyle='#6b7f9c';c.font='600 34px sans-serif';c.textAlign='center';c.fillText('Sua foto aqui',v.CX,v.CY+10)}
+    if(v.fr.complete)c.drawImage(v.fr,0,0,S,S)}
+  function drawAll(){views.forEach(draw)}
+  function clamp(){var mx=9,my=9;views.forEach(function(v){var k=v.bs();mx=Math.min(mx,Math.max(0,(photo.width*k/2-v.R)/v.R));my=Math.min(my,Math.max(0,(photo.height*k/2-v.R)/v.R))});nx=Math.max(-mx,Math.min(mx,nx));ny=Math.max(-my,Math.min(my,ny))}
   function load(f){
     if(!f||!/^image\//.test(f.type||'')){hint.textContent='Esse arquivo não é uma imagem. Use uma foto JPG ou PNG.';return}
-    var url=URL.createObjectURL(f),im=new Image();
-    im.onload=function(){photo=im;bs=(2*R)/Math.min(im.width,im.height);zm=1;ox=0;oy=0;zoom.value=100;zoom.disabled=false;bsave.disabled=false;bshare.disabled=false;hint.textContent='Arraste a foto para centralizar o rosto no círculo e use o controle para aproximar.';draw()};
+    var im=new Image();
+    im.onload=function(){photo=im;zm=1;nx=0;ny=0;zoom.value=100;zoom.disabled=false;bboth.disabled=false;views.forEach(function(v){v.dl.disabled=false;v.sh.disabled=false});hint.textContent='Arraste a foto para centralizar o rosto e use o controle para aproximar. As duas molduras acompanham.';drawAll()};
     im.onerror=function(){hint.textContent='Não consegui abrir essa imagem. Tente outra foto (JPG ou PNG).'};
-    im.src=url;
-  }
+    im.src=URL.createObjectURL(f)}
+  document.getElementById('m-pick').onclick=function(){file.click()};
   file.onchange=function(){load(file.files&&file.files[0])};
-  var stage=cv.parentNode;
-  ['dragenter','dragover'].forEach(function(t){stage.addEventListener(t,function(e){e.preventDefault();stage.style.outline='4px dashed #1d5cc0'})});
-  ['dragleave','drop'].forEach(function(t){stage.addEventListener(t,function(e){e.preventDefault();stage.style.outline=''})});
-  stage.addEventListener('drop',function(e){var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];load(f)});
-  cv.addEventListener('click',function(){if(!photo&&!dragMoved)file.click()});
-  zoom.oninput=function(){zm=zoom.value/100;if(photo){clamp();draw()}};
-  var drag=null,dragMoved=false;
-  function pt(e){var r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*S/r.width,y:(e.clientY-r.top)*S/r.height}}
-  cv.addEventListener('pointerdown',function(e){if(!photo)return;var p=pt(e);drag={x:p.x,y:p.y,ox:ox,oy:oy};try{cv.setPointerCapture(e.pointerId)}catch(_){}cv.style.cursor='grabbing'});
-  cv.addEventListener('pointermove',function(e){if(!drag)return;var p=pt(e);ox=drag.ox+p.x-drag.x;oy=drag.oy+p.y-drag.y;clamp();draw()});
-  function end(){drag=null;cv.style.cursor='grab'}
-  cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);
-  cv.addEventListener('wheel',function(e){if(!photo)return;e.preventDefault();var v=Math.max(100,Math.min(400,+zoom.value-e.deltaY/4));zoom.value=v;zoom.oninput()},{passive:false});
-  function blob(cb){circ?cv.toBlob(cb,'image/png'):cv.toBlob(cb,'image/jpeg',0.93)}
-  function ext(){return circ?'png':'jpg'}
-  function mime(){return circ?'image/png':'image/jpeg'}
-  function setMode(c){circ=c;CX=540;CY=c?540:505;R=c?390:325;if(photo){bs=(2*R)/Math.min(photo.width,photo.height);zm=1;ox=0;oy=0;zoom.value=100}document.getElementById('m-sq').className='btn sm'+(c?'':' on');document.getElementById('m-ci').className='btn sm'+(c?' on':'');document.getElementById('m-sq').setAttribute('aria-pressed',!c);document.getElementById('m-ci').setAttribute('aria-pressed',c);draw()}
-  document.getElementById('m-sq').onclick=function(){setMode(false)};document.getElementById('m-ci').onclick=function(){setMode(true)};
-  bsave.onclick=function(){blob(function(b){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='minha-foto-chapa1.'+ext();document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},4000)})};
-  var canFile=false;
-  try{canFile=!!(navigator.canShare&&navigator.canShare({files:[new File([new Blob(['x'],{type:'image/jpeg'})],'a.jpg',{type:'image/jpeg'})]}))}catch(e){}
-  var canCopy=!!(navigator.clipboard&&window.ClipboardItem);
-  if(canFile){bshare.textContent='Compartilhar'}
-  else if(canCopy){bshare.textContent='Copiar imagem';bshare.className='btn sm';}
-  else{bshare.style.display='none'}
-  bshare.onclick=function(){
-    if(canFile){blob(function(b){var f=new File([b],'minha-foto-chapa1.'+ext(),{type:mime()});navigator.share({files:[f],text:'Eu voto Chapa 1! www.votechapa1.netlify.app'}).catch(function(){})})}
-    else{cv.toBlob(function(b){navigator.clipboard.write([new ClipboardItem({'image/png':b})]).then(function(){hint.textContent='Imagem copiada! Agora é só colar (Ctrl+V) na conversa ou na publicação.'}).catch(function(){hint.textContent='Não consegui copiar. Use o botão Baixar imagem.'})},'image/png')}
-  };
+  zoom.oninput=function(){zm=zoom.value/100;if(photo){clamp();drawAll()}};
+  var drag=null;
+  views.forEach(function(v){
+    var cv=v.cv,stage=cv.parentNode;
+    function pt(e){var r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*S/r.width,y:(e.clientY-r.top)*S/r.height}}
+    cv.addEventListener('pointerdown',function(e){if(!photo)return;var p=pt(e);drag={v:v,x:p.x,y:p.y,nx:nx,ny:ny};try{cv.setPointerCapture(e.pointerId)}catch(_){}cv.style.cursor='grabbing'});
+    cv.addEventListener('pointermove',function(e){if(!drag||drag.v!==v)return;var p=pt(e);nx=drag.nx+(p.x-drag.x)/v.R;ny=drag.ny+(p.y-drag.y)/v.R;clamp();drawAll()});
+    function end(){drag=null;cv.style.cursor='grab'}
+    cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);
+    cv.addEventListener('wheel',function(e){if(!photo)return;e.preventDefault();zoom.value=Math.max(100,Math.min(400,+zoom.value-e.deltaY/4));zoom.oninput()},{passive:false});
+    cv.addEventListener('click',function(){if(!photo)file.click()});
+    ['dragenter','dragover'].forEach(function(t){stage.addEventListener(t,function(e){e.preventDefault();stage.style.outline='4px dashed #1d5cc0'})});
+    ['dragleave','drop'].forEach(function(t){stage.addEventListener(t,function(e){e.preventDefault();stage.style.outline=''})});
+    stage.addEventListener('drop',function(e){load(e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0])});
+    function blob(cb){v.circ?cv.toBlob(cb,'image/png'):cv.toBlob(cb,'image/jpeg',0.93)}
+    v.save=function(){blob(function(b){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='minha-foto-chapa1-'+(v.circ?'circular':'quadrada')+'.'+v.ext;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},4000)})};
+    v.dl.onclick=v.save;
+    v.sh.onclick=function(){
+      if(canFile){blob(function(b){var f=new File([b],'minha-foto-chapa1.'+v.ext,{type:v.mime});navigator.share({files:[f],text:'Eu voto Chapa 1! www.votechapa1.netlify.app'}).catch(function(){})})}
+      else{cv.toBlob(function(b){navigator.clipboard.write([new ClipboardItem({'image/png':b})]).then(function(){hint.textContent='Imagem copiada! Agora é só colar (Ctrl+V) na conversa ou na publicação.'}).catch(function(){hint.textContent='Não consegui copiar. Use o botão Baixar.'})},'image/png')}
+    };
+  });
+  bboth.onclick=function(){views[0].save();setTimeout(views[1].save,500)};
 })();
 </script>
 </body>
