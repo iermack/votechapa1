@@ -879,7 +879,7 @@ if(sel){var o=document.createElement('option');o.value='';o.textContent='Todos o
 
 <script>
 (function(){
-  var msg=document.getElementById('sh-msg'),TXT='Conheça a *Chapa 1 (Flávio e Ricardo)* para o Conselho Deliberativo do Agros. A eleição é em 27/11.\nhttps://www.votechapa1.netlify.app',files={},timer;
+  var msg=document.getElementById('sh-msg'),TXT='Conheça a *Chapa 1 (Flávio e Ricardo)* para o Conselho Deliberativo do Agros. A eleição é em 27/11.\nhttps://votechapa1.netlify.app',files={},timer;
   function say(t){msg.textContent=t;msg.hidden=false;clearTimeout(timer);timer=setTimeout(function(){msg.hidden=true},12000)}
   function save(img,name){var a=document.createElement('a');a.href=img.currentSrc||img.src;a.download=name;document.body.appendChild(a);a.click();a.remove()}
   function prep(card){
@@ -961,7 +961,7 @@ if(sel){var o=document.createElement('option');o.value='';o.textContent='Todos o
     v.save=function(){blob(function(b){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='minha-foto-chapa1-'+(v.circ?'circular':'quadrada')+'.'+v.ext;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},4000)})};
     v.dl.onclick=v.save;
     v.sh.onclick=function(){
-      if(canFile){blob(function(b){var f=new File([b],'minha-foto-chapa1.'+v.ext,{type:v.mime});navigator.share({files:[f],text:'Eu voto Chapa 1! www.votechapa1.netlify.app'}).catch(function(){})})}
+      if(canFile){blob(function(b){var f=new File([b],'minha-foto-chapa1.'+v.ext,{type:v.mime});navigator.share({files:[f],text:'Eu voto Chapa 1! https://votechapa1.netlify.app'}).catch(function(){})})}
       else{cv.toBlob(function(b){navigator.clipboard.write([new ClipboardItem({'image/png':b})]).then(function(){hint.textContent='Imagem copiada! Agora é só colar (Ctrl+V) na conversa ou na publicação.'}).catch(function(){hint.textContent='Não consegui copiar. Use o botão Baixar.'})},'image/png')}
     };
   });
