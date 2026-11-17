@@ -210,13 +210,13 @@ nav a{font-weight:500;border-bottom-width:2px}
 .hero .sig{font-weight:400}
 .hero .date{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);border-radius:18px}
 .hero .date b{color:#fff;font-weight:600}
-.cd{margin:-8px 0 26px}
-.cd .cd-t{font-size:.92rem;font-weight:700;color:#fff;margin:0 0 8px;letter-spacing:.01em}
-.cd .cd-g{display:flex;gap:8px}
-.cd .cd-b{min-width:62px;text-align:center;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);border-radius:14px;padding:8px 6px 6px}
-.cd .cd-b b{display:block;font-family:var(--display);font-size:1.7rem;line-height:1;color:#fff;font-variant-numeric:tabular-nums}
-.cd .cd-b span{display:block;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:#cfe6fb;margin-top:4px}
-.cd .cd-msg{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);border-radius:14px;padding:10px 16px;font-weight:700;color:#fff}
+.cd{margin:-12px 0 20px;font-size:.92rem;color:#e6f1fc;font-variant-numeric:tabular-nums}
+.cd .cd-t{font-weight:500;margin-right:4px}
+.cd .cd-g{display:inline}
+.cd .cd-b{display:inline;margin-right:7px}
+.cd .cd-b b{font-weight:700;color:#fff;font-size:1.02rem}
+.cd .cd-b span{margin-left:1px;color:#cfe6fb;font-size:.82rem}
+.cd .cd-msg{font-weight:600;color:#fff}
 
 .btn{border-radius:999px;font-weight:600;box-shadow:0 6px 16px rgba(31,79,149,.18)}
 .btn.ghost{border-width:1.5px;box-shadow:none}
@@ -413,7 +413,7 @@ header.top nav a.nav-cta{padding:6px 15px;font-size:.84rem}
       <h1>Transparência hoje. Sustentabilidade amanhã.</h1>
       <p class="sig">Contas claras para <em>o seu benefício</em> e <em>a sua saúde</em>.</p>
       <div class="date"><b>27/11</b><span>Dia da eleição<br>Online das 00h às 17h</span></div>
-      <div class="cd" id="cd" aria-live="polite"><p class="cd-t" id="cd-t">Faltam para a eleição</p><div class="cd-g" id="cd-g"><div class="cd-b"><b id="cd-d">--</b><span>dias</span></div><div class="cd-b"><b id="cd-h">--</b><span>horas</span></div><div class="cd-b"><b id="cd-m">--</b><span>min</span></div><div class="cd-b"><b id="cd-s">--</b><span>seg</span></div></div></div>
+      <div class="cd" id="cd" aria-live="polite"><span class="cd-t" id="cd-t">Faltam para a eleição:</span><span class="cd-g" id="cd-g"><span class="cd-b"><b id="cd-d">--</b><span>d</span></span><span class="cd-b"><b id="cd-h">--</b><span>h</span></span><span class="cd-b"><b id="cd-m">--</b><span>min</span></span><span class="cd-b"><b id="cd-s">--</b><span>s</span></span></span></div>
       <div class="btns">
         <a class="btn big" href="#votar">Como votar</a>
         <a class="btn ghost big" href="#compromissos">Nossas propostas</a>
@@ -983,10 +983,10 @@ if(sel){var o=document.createElement('option');o.value='';o.textContent='Todos o
   if(!box)return;
   function p(n){return n<10?'0'+n:''+n}
   function set(ms){var s=Math.max(0,Math.floor(ms/1000));document.getElementById('cd-d').textContent=Math.floor(s/86400);document.getElementById('cd-h').textContent=p(Math.floor(s%86400/3600));document.getElementById('cd-m').textContent=p(Math.floor(s%3600/60));document.getElementById('cd-s').textContent=p(s%60)}
-  function msg(txt){g.style.display='none';t.className='cd-msg';t.textContent=txt}
+  function msg(txt){g.style.display='none';t.className='cd-t cd-msg';t.textContent=txt}
   function tick(){var n=Date.now();
-    if(n<ini){t.textContent='Faltam para a eleição';set(ini-n)}
-    else if(n<fim){t.textContent='A votação está aberta! Encerra às 17h. Faltam:';g.style.display='flex';set(fim-n);var d=document.getElementById('cd-d').parentNode;d.style.display='none'}
+    if(n<ini){t.textContent='Faltam para a eleição:';set(ini-n)}
+    else if(n<fim){t.textContent='Votação aberta! Encerra às 17h. Faltam:';g.style.display='inline';set(fim-n);var d=document.getElementById('cd-d').parentNode;d.style.display='none'}
     else{msg('Eleição encerrada. Obrigado pelo seu apoio!');clearInterval(iv)}}
   var iv=setInterval(tick,1000);tick();
 })();
