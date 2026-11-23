@@ -395,6 +395,22 @@ header.top nav a.nav-cta{padding:6px 15px;font-size:.84rem}
 </style>
 </head>
 <body>
+<script>
+/* Encerramento automático: a partir de 26/11/2026 às 23:30 (Brasília) a página deixa de exibir o conteúdo da campanha. */
+(function(){
+  var LIM=Date.parse('2026-11-26T23:30:00-03:00');
+  function encerrar(){
+    document.title='Chapa 1 · Campanha encerrada';
+    document.body.className='';
+    document.body.style.cssText='margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#1f4f95;color:#fff;font-family:"Source Sans 3",system-ui,sans-serif;text-align:center;padding:24px';
+    document.body.innerHTML='<main><h1 style="font-size:2rem;margin:0 0 10px">Chapa 1</h1><p style="font-size:1.2rem;margin:0">Campanha encerrada. Obrigado pelo apoio.</p></main>';
+  }
+  window.__encerrarChapa1=encerrar;
+  if(Date.now()>=LIM){document.documentElement.style.visibility='hidden';document.addEventListener('DOMContentLoaded',function(){encerrar();document.documentElement.style.visibility=''})}
+  else{var ms=LIM-Date.now();if(ms<2000000000)setTimeout(encerrar,ms)}
+})();
+</script>
+
 
 <header class="top">
   <div class="wrap">
