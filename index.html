@@ -991,5 +991,19 @@ if(sel){var o=document.createElement('option');o.value='';o.textContent='Todos o
   var iv=setInterval(tick,1000);tick();
 })();
 </script>
+<script>
+(function(){
+  var f=null,ok=false;
+  try{fetch('img/divulga_quadrada.jpg').then(function(r){return r.blob()}).then(function(b){f=new File([b],'chapa1-arte-quadrada.jpg',{type:'image/jpeg'});ok=!!(navigator.canShare&&navigator.canShare({files:[f]}))}).catch(function(){})}catch(e){}
+  [].forEach.call(document.querySelectorAll('a[href^="https://wa.me/"]'),function(a){
+    a.addEventListener('click',function(e){
+      if(!ok)return;
+      var t='';try{t=decodeURIComponent((a.getAttribute('href').split('text=')[1]||''))}catch(x){}
+      e.preventDefault();
+      navigator.share({files:[f],text:t}).catch(function(){});
+    });
+  });
+})();
+</script>
 </body>
 </html>
