@@ -1003,14 +1003,27 @@ if(sel){var o=document.createElement('option');o.value='';o.textContent='Todos o
 </script>
 <script>
 (function(){
-  var f=null,ok=false;
-  try{fetch('img/divulga_quadrada.jpg').then(function(r){return r.blob()}).then(function(b){f=new File([b],'chapa1-arte-quadrada.jpg',{type:'image/jpeg'});ok=!!(navigator.canShare&&navigator.canShare({files:[f]}))}).catch(function(){})}catch(e){}
+  var f=null,bl=null,ok=false,toast=null,tt;
+  try{fetch('img/divulga_quadrada.jpg').then(function(r){return r.blob()}).then(function(b){bl=b;f=new File([b],'chapa1-arte-quadrada.jpg',{type:'image/jpeg'});ok=!!(navigator.canShare&&navigator.canShare({files:[f]}))}).catch(function(){})}catch(e){}
+  function say(t){
+    if(!toast){toast=document.createElement('div');toast.setAttribute('role','status');toast.style.cssText='position:fixed;left:50%;bottom:90px;transform:translateX(-50%);max-width:min(92vw,460px);background:#0f2347;color:#fff;padding:12px 18px;border-radius:14px;font-size:.95rem;line-height:1.4;box-shadow:0 10px 30px rgba(3,15,45,.35);z-index:60;text-align:center';document.body.appendChild(toast)}
+    toast.textContent=t;toast.style.display='block';clearTimeout(tt);tt=setTimeout(function(){toast.style.display='none'},14000);
+  }
+  var mobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
   [].forEach.call(document.querySelectorAll('a[href^="https://wa.me/"]'),function(a){
     a.addEventListener('click',function(e){
-      if(!ok)return;
-      var t='';try{t=decodeURIComponent((a.getAttribute('href').split('text=')[1]||''))}catch(x){}
-      e.preventDefault();
-      navigator.share({files:[f],text:t}).catch(function(){});
+      if(ok){
+        var t='';try{t=decodeURIComponent((a.getAttribute('href').split('text=')[1]||''))}catch(x){}
+        e.preventDefault();
+        navigator.share({files:[f],text:t}).catch(function(){});
+        return;
+      }
+      if(!mobile&&bl&&navigator.clipboard&&window.ClipboardItem){
+        try{
+          var png=createImageBitmap(bl).then(function(bm){var c=document.createElement('canvas');c.width=bm.width;c.height=bm.height;c.getContext('2d').drawImage(bm,0,0);return new Promise(function(res){c.toBlob(res,'image/png')})});
+          navigator.clipboard.write([new ClipboardItem({'image/png':png})]).then(function(){say('Imagem da chapa copiada. No WhatsApp, escolha o contato e cole com Ctrl+V para enviar junto.')}).catch(function(){});
+        }catch(x){}
+      }
     });
   });
 })();
