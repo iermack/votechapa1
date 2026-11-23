@@ -1,0 +1,25 @@
+name: Desligar site em 26/11 às 23:30 (Brasília)
+
+on:
+  schedule:
+    # 02:30 UTC de 27/11 = 23:30 de 26/11 em Brasília
+    - cron: '30 2 27 11 *'
+
+jobs:
+  desligar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Apagar o site no Netlify (só se já passou do horário)
+        env:
+          NETLIFY_TOKEN: ${{ secrets.NETLIFY_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        run: |
+          LIMITE=$(date -u -d '2026-11-27 02:30:00' +%s)
+          AGORA=$(date -u +%s)
+          if [ "$AGORA" -lt "$LIMITE" ]; then echo "Ainda não chegou o horário. Nada feito."; exit 0; fi
+          if [ "$AGORA" -gt $((LIMITE + 172800)) ]; then echo "Fora da janela. Nada feito."; exit 0; fi
+          CODE=$(curl -s -o resp.txt -w '%{http_code}' -X DELETE \
+            -H "Authorization: Bearer $NETLIFY_TOKEN" \
+            "https://api.netlify.com/api/v1/sites/$NETLIFY_SITE_ID")
+          echo "Resposta do Netlify: $CODE"
+          if [ "$CODE" != "204" ] && [ "$CODE" != "200" ]; then cat resp.txt; exit 1; fi
